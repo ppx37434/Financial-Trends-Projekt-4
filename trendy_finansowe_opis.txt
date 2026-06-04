@@ -1,0 +1,10 @@
+„Analiza trendów i determinantów wybranych wskaźników finansowych na przestrzeni lat”
+
+Q1: Jaka grupa wiekowa i płeć charakteryzuje się największą aktywnością inwestycyjną uwzgędniając ryzyka inwestycyjne. 
+
+Q2: Jaki jest główny czynnik decydujący o inwestowaniu (np. oczekiwana stopa zwrotu, bezpieczeństwo, płynność) i jak wpływa na wybór konkretnego instrumentu inwestycyjnego?
+
+Q3: Która płeć i w jakim wieku (przedział czasowy, np. co dekadę) jest najbardziej skłonna do podejmowania ryzyka inwestycyjnego dla danego typu inwestycji (np. akcje, obligacje, metale szlachetne, fundusze etc)?
+
+Extra: Czy na podstawie danych (cech) inwestora oraz jego preferencji inwestycyjnych (wiek, płeć, cel inwestycyjny, horyzont inwestycji, czynniki decyzyjne i źródła informacji) można z wykorzystaniem metod Machine Learning przewidzieć wybór instrumentu inwestycyjnego (np. fundusze inwestycyjne, rynek akcji, obligacje rządowe lub lokaty terminowe)?
+Tu zadanie polega na zbudowaniu modelu predykcyjnego (np. regresja, XGBoost, LSTM, sieci neuronowe) do prognozy wartości finansowych na podstawie dostępnych cech oraz trendów.
