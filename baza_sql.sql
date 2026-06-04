@@ -48,7 +48,6 @@ INSERT INTO dbo.userProfileFields(id, fieldName) VALUES
 (7, 'Avenue'),
 (8, 'What are your saving objectives');
 
-SELECT * from userProfileFields
 
 CREATE TABLE dbo.userProfileAnswer (
 	id INT IDENTITY(1,1) PRIMARY KEY,
@@ -61,10 +60,6 @@ CREATE TABLE dbo.userProfile (
 	answerId INT FOREIGN KEY REFERENCES dbo.userProfileAnswer(id),
 	PRIMARY KEY(userId, answerId)
 )
-
-SELECT * FROM dbo.userProfileAnswer
-SELECT * FROM dbo.userProfileFields
-SELECT * FROM dbo.userProfile
 
 INSERT INTO dbo.userProfileAnswer (fieldId, answer)
 SELECT DISTINCT 1, factor FROM dbo.stg_finance_data WHERE factor IS NOT NULL
@@ -83,7 +78,6 @@ SELECT DISTINCT 7, avenue FROM dbo.stg_finance_data WHERE avenue IS NOT NULL
 UNION
 SELECT DISTINCT 8, savingObjectives FROM dbo.stg_finance_data WHERE savingObjectives IS NOT NULL;
 
-SELECT * FROM dbo.userProfileAnswer
 
 -- Factor
 INSERT INTO dbo.userProfile (userId, answerId)
@@ -142,40 +136,6 @@ JOIN dbo.userProfileAnswer a ON s.savingObjectives = a.answer AND a.fieldId = 8
 WHERE s.savingObjectives IS NOT NULL;
 
 
-
-
-
-
-
-
-
-SELECT 
-    f.fieldName AS Pytanie,
-    a.answer AS Udzielona_Odpowiedz
-FROM dbo.userProfile p
-JOIN dbo.userProfileAnswer a ON p.answerId = a.id
-JOIN dbo.userProfileFields f ON a.fieldId = f.id
-WHERE p.userId = 1
-ORDER BY f.id;
-
-
--- 1. DANE ZNORMALIZOWANE (Złożone przez JOIN z 3 tabel)
-SELECT 
-    f.fieldName AS Pytanie,
-    a.answer AS Udzielona_Odpowiedz
-FROM dbo.userProfile p
-JOIN dbo.userProfileAnswer a ON p.answerId = a.id
-JOIN dbo.userProfileFields f ON a.fieldId = f.id
-WHERE p.userId = 150
-ORDER BY f.id;
-
--- 2. DANE SUROWE (Z oryginalnej tabeli stagingowej)
-SELECT 
-    Factor, Objective, Purpose, Duration, 
-    investMonitor, Expect, Avenue, 
-    savingObjectives
-FROM dbo.stg_finance_data
-WHERE UserId = 150;
 
 INSERT INTO dbo.reasonType(id, reasonType) VALUES
 (1, 'Reason Equity'),
@@ -246,10 +206,6 @@ CREATE TABLE investmentScore (
 	PRIMARY KEY (userId, investmentTypeId)
 );
 
-SELECT * FROM dbo.investmentScore
-SELECT * FROM dbo.investmenttype
-
-
 INSERT INTO dbo.investmentType (id, investmentType) VALUES
 (1, 'Mutual Funds'),
 (2, 'Equity Market'),
@@ -304,8 +260,6 @@ INSERT INTO dbo.InvestmentText(id,investmentText) VALUES
 (1,'Investment Avenues'),
 (2,'Stock Market');
 
-SELECT * FROM dbo.userInvestmentProfile
-
 CREATE TABLE dbo.userInvestmentProfile (
 	userId INT FOREIGN KEY REFERENCES dbo.users(id),
 	investmentId INT FOREIGN KEY REFERENCES dbo.investmentText(id),
@@ -326,114 +280,4 @@ FROM dbo.stg_finance_data;
 
 
 
-CREATE TABLE dbo.userProfileFields (
-	id INT PRIMARY KEY,
-	fieldName VARCHAR(100)
-);
-
-INSERT INTO dbo.userProfileFields(id, fieldName) VALUES
-(1, 'Factor'),
-(2, 'Objective'),
-(3, 'Purpose'),
-(4, 'Duration'),
-(5, 'Invest Monitor'),
-(6, 'Expect'),
-(7, 'Avenue'),
-(8, 'What are your saving objectives');
-
-SELECT * from userProfileFields
-
-CREATE TABLE dbo.userProfileAnswer (
-	id INT IDENTITY(1,1) PRIMARY KEY,
-	fieldId INT FOREIGN KEY REFERENCES userProfileFields(id),
-	answer VARCHAR(100)
-);
-
-CREATE TABLE dbo.userProfile (
-	userId INT FOREIGN KEY REFERENCES dbo.users(id),
-	answerId INT FOREIGN KEY REFERENCES dbo.userProfileAnswer(id),
-	PRIMARY KEY(userId, answerId)
-)
-
-SELECT * FROM dbo.userProfileAnswer
-SELECT * FROM dbo.userProfileFields
-SELECT * FROM dbo.userProfile
-
-INSERT INTO dbo.userProfileAnswer (fieldId, answer)
-SELECT DISTINCT 1, factor FROM dbo.stg_finance_data WHERE factor IS NOT NULL
-UNION
-SELECT DISTINCT 2, objective FROM dbo.stg_finance_data WHERE objective IS NOT NULL
-UNION
-SELECT DISTINCT 3, Purpose FROM dbo.stg_finance_data WHERE purpose IS NOT NULL
-UNION
-SELECT DISTINCT 4, duration FROM dbo.stg_finance_data WHERE duration IS NOT NULL
-UNION
-SELECT DISTINCT 5, investMonitor FROM dbo.stg_finance_data WHERE investMonitor IS NOT NULL
-UNION
-SELECT DISTINCT 6, expect FROM dbo.stg_finance_data WHERE expect IS NOT NULL
-UNION
-SELECT DISTINCT 7, avenue FROM dbo.stg_finance_data WHERE avenue IS NOT NULL
-UNION
-SELECT DISTINCT 8, savingObjectives FROM dbo.stg_finance_data WHERE savingObjectives IS NOT NULL;
-
-SELECT * FROM dbo.userProfileAnswer
-
--- Factor
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.factor = a.answer AND a.fieldId = 1
-WHERE s.factor IS NOT NULL;
-
--- Objective
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.objective = a.answer AND a.fieldId = 2
-WHERE s.objective IS NOT NULL;
-
--- Purpose
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.purpose = a.answer AND a.fieldId = 3
-WHERE s.purpose IS NOT NULL;
-
--- Duration
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.duration = a.answer AND a.fieldId = 4
-WHERE s.duration IS NOT NULL;
-
--- Invest Monitor
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.investMonitor = a.answer AND a.fieldId = 5
-WHERE s.investMonitor IS NOT NULL;
-
--- Expect
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.expect = a.answer AND a.fieldId = 6
-WHERE s.expect IS NOT NULL;
-
--- Avenue
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.avenue = a.answer AND a.fieldId = 7
-WHERE s.avenue IS NOT NULL;
-
--- Savings objectives
-INSERT INTO dbo.userProfile (userId, answerId)
-SELECT s.userId, a.id
-FROM dbo.stg_finance_data s
-JOIN dbo.userProfileAnswer a ON s.savingObjectives = a.answer AND a.fieldId = 8
-WHERE s.savingObjectives IS NOT NULL;
-
-
-SELECT * FROM dbo.userProfile
 
